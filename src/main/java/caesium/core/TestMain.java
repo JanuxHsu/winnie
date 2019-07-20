@@ -1,10 +1,9 @@
 package caesium.core;
 
-import java.util.List;
 import java.util.Map;
 
+import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
-import org.quartz.CronScheduleBuilder;
 import org.quartz.JobBuilder;
 import org.quartz.JobDataMap;
 import org.quartz.JobDetail;
@@ -14,17 +13,22 @@ import org.quartz.SchedulerException;
 import org.quartz.SimpleScheduleBuilder;
 import org.quartz.Trigger;
 import org.quartz.TriggerBuilder;
-import org.quartz.TriggerUtils;
-import org.quartz.impl.triggers.SimpleTriggerImpl;
 
+import caesium.log.CaesiumLogAppender;
 import caesium.model.CaesiumJob;
 
 public class TestMain {
 
-	static Logger logger = Logger.getLogger(org.quartz.impl.StdSchedulerFactory.class.getName());
+	static Logger logger = Logger.getRootLogger();
 
 	public static void main(String[] args) throws SchedulerException {
+		//Logger.getRootLogger().setLevel(Level.OFF);
+		CaesiumLogAppender caesiumLogAppender = new CaesiumLogAppender();
+		logger.addAppender(caesiumLogAppender);
+
 		CaesiumCore caesiumCore = CaesiumCore.getInstance();
+		
+		
 
 		caesiumCore.runScheduler();
 

@@ -1,11 +1,13 @@
 package caesium.core;
 
+import org.apache.log4j.Logger;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.quartz.JobListener;
 
 public class CaesiumJobListener implements JobListener {
 
+	Logger logger = Logger.getLogger(CaesiumJobListener.class);
 	String listenerName = null;
 
 	public CaesiumJobListener(String listenerName) {
@@ -31,8 +33,8 @@ public class CaesiumJobListener implements JobListener {
 
 	@Override
 	public void jobWasExecuted(JobExecutionContext context, JobExecutionException jobException) {
-		System.out.println(context.getJobDetail().getKey().getName() + " done");
-		
+		logger.info(context.getJobDetail().getKey().getName() + " done");
+
 		if (jobException != null) {
 			jobException.printStackTrace();
 		}
