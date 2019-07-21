@@ -14,7 +14,7 @@ import org.quartz.Trigger;
 import org.quartz.impl.StdSchedulerFactory;
 import org.quartz.impl.matchers.GroupMatcher;
 
-import caesium.model.CaesiumJob;
+import caesium.job_model.SingletonCaesiumJob;
 import caesium.model.CaesiumRepository;
 
 public class CaesiumCore {
@@ -64,8 +64,8 @@ public class CaesiumCore {
 		this.schedulerFactory.getScheduler().start();
 	}
 
-	public Map<String, CaesiumJob> listAllJobs() throws SchedulerException {
-		Map<String, CaesiumJob> jobList = new HashMap<>();
+	public Map<String, SingletonCaesiumJob> listAllJobs() throws SchedulerException {
+		Map<String, SingletonCaesiumJob> jobList = new HashMap<>();
 		Scheduler scheduler = this.getScheduler();
 
 		for (String groupName : scheduler.getJobGroupNames()) {

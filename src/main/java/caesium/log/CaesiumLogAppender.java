@@ -1,9 +1,26 @@
 package caesium.log;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+
 import org.apache.log4j.AppenderSkeleton;
 import org.apache.log4j.spi.LoggingEvent;
 
 public class CaesiumLogAppender extends AppenderSkeleton {
+
+	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+	ArrayList<LogListener> logSubscriberList = new ArrayList<>();
+
+	public CaesiumLogAppender() {
+
+	}
+
+	public int addLogSubscriber(LogListener logListener) {
+		this.logSubscriberList.add(logListener);
+		return this.logSubscriberList.indexOf(logListener);
+	}
 
 	@Override
 	public void close() {
@@ -19,10 +36,15 @@ public class CaesiumLogAppender extends AppenderSkeleton {
 
 	@Override
 	protected void append(LoggingEvent event) {
-		
-		//System.out.println(event.getLoggerName() + " | " + event.getMessage());
-		if (event.getLoggerName().contains("Caesium")) {
-			System.out.println(event.getMessage());
+
+		// System.out.println(event.getLoggerName() + " | " + event.getMessage());
+		if (event.getLoggerName().contains("caesium")) {
+			String timestamp = sdf.format(new Date(event.getTimeStamp()));
+			String logText = String.format("[%s]%s : %s", event.getLevel(), timestamp, event.getMessage());
+			System.out.println(logText);
+			for (LogListener logListener : this.logSubscriberList) {
+				logListener.onLog(logText);
+			}
 		}
 
 	}

@@ -33,6 +33,7 @@ public class CaesiumJobListener implements JobListener {
 
 	@Override
 	public void jobWasExecuted(JobExecutionContext context, JobExecutionException jobException) {
+
 		logger.info(context.getJobDetail().getKey().getName() + " done");
 
 		if (jobException != null) {

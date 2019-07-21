@@ -3,9 +3,8 @@ package caesium.model;
 import java.util.HashMap;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.concurrent.ThreadPoolExecutor;
 
-import caesium.model.CaesiumJob;
+import caesium.job_model.SingletonCaesiumJob;
 
 public class CaesiumRepository {
 
@@ -14,10 +13,9 @@ public class CaesiumRepository {
 	// ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(corePoolSize,
 	// maximumPoolSize, keepAliveTime, unit, workQueue)
 
-	static ConcurrentLinkedQueue<CaesiumJob> waitingJobList = new ConcurrentLinkedQueue<>();
-	static ConcurrentHashMap<Long, CaesiumJob> runningJobList = new ConcurrentHashMap<>();
-
-	static HashMap<String, CaesiumJob> jobListMap = new HashMap<>();
+	static ConcurrentLinkedQueue<SingletonCaesiumJob> waitingJobList = new ConcurrentLinkedQueue<>();
+	static ConcurrentHashMap<Long, SingletonCaesiumJob> runningJobList = new ConcurrentHashMap<>();
+	static HashMap<String, SingletonCaesiumJob> jobListMap = new HashMap<>();
 
 	public void setRunScheduledJobs(boolean flag) {
 		this.doScheduling = flag;
