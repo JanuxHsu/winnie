@@ -15,12 +15,10 @@ import org.quartz.impl.StdSchedulerFactory;
 import org.quartz.impl.matchers.GroupMatcher;
 
 import caesium.job_model.SingletonCaesiumJob;
-import caesium.model.CaesiumRepository;
 
 public class CaesiumCore {
 	static Logger logger = Logger.getLogger(CaesiumCore.class.getName());
 	private static CaesiumCore instance = null;
-	private volatile CaesiumRepository caesiumStatus;
 
 	private SchedulerFactory schedulerFactory;
 
@@ -50,10 +48,6 @@ public class CaesiumCore {
 			}
 		}
 		return instance;
-	}
-
-	public CaesiumRepository getSCaesiumCoreStatus() {
-		return this.caesiumStatus;
 	}
 
 	public Scheduler getScheduler() throws SchedulerException {

@@ -53,6 +53,7 @@ public class CaesiumSwingGui {
 	protected JFrame mainWindow;
 	TrayIcon trayIcon;
 	Font monoFont = new Font(Font.MONOSPACED, Font.BOLD, 10);
+	Font labelFont = new Font(Font.SANS_SERIF, Font.PLAIN, 12);
 	Font defaultFont = new Font(Font.SANS_SERIF, Font.PLAIN, 10);
 	Font loggerFont = new Font(Font.SANS_SERIF, Font.PLAIN, 9);
 	JLabel statusLabel;
@@ -64,10 +65,13 @@ public class CaesiumSwingGui {
 	JTable systemInfoTable;
 	JTextArea logArea;
 
+	JButton toggleSchedulerButton;
+
 	Map<String, ActionListener> actionListenerMap = new HashMap<>();
 	Map<String, MouseListener> mouseListenerMap = new HashMap<>();
 
 	private Long iconShowMessageTimestamp = Calendar.getInstance().getTimeInMillis();
+	JLabel schedulingLabel;
 
 	public CaesiumSwingGui() {
 
@@ -218,27 +222,27 @@ public class CaesiumSwingGui {
 		JPanel topPanel = new JPanel(new BorderLayout());
 
 		JPanel topBar = new JPanel(new BorderLayout());
-		JLabel contextStartupTimeLabel = new JLabel("Connecting...");
-		this.statusLabel = contextStartupTimeLabel;
-		contextStartupTimeLabel.setOpaque(true);
-		contextStartupTimeLabel.setBackground(Color.RED);
-		contextStartupTimeLabel.setForeground(Color.WHITE);
-		contextStartupTimeLabel.setFont(defaultFont);
+		JLabel statusLabel = new JLabel("Connecting...");
+		this.statusLabel = statusLabel;
+		statusLabel.setOpaque(true);
+		statusLabel.setBackground(Color.RED);
+		statusLabel.setForeground(Color.WHITE);
+		statusLabel.setFont(labelFont);
 
-		contextStartupTimeLabel.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 0));
+		statusLabel.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 0));
 
 		JLabel hydraIcon = new JLabel(new ImageIcon(Toolkit.getDefaultToolkit()
 				.getImage(this.getClass().getClassLoader().getResource("resources/clock24.png"))));
 		hydraIcon.setHorizontalAlignment(JLabel.CENTER);
 		topBar.add(hydraIcon, BorderLayout.WEST);
-		topBar.add(contextStartupTimeLabel, BorderLayout.CENTER);
+		topBar.add(statusLabel, BorderLayout.CENTER);
 
 		JPanel dashboardPanel = new JPanel(new GridLayout(1, 3));
 
 		dashboardPanel.setOpaque(true);
 		dashboardPanel.setBackground(new Color(44, 62, 80));
 
-		JPanel leftDashPanel = new JPanel(new GridLayout(2, 1, 2, 2));
+		JPanel leftDashPanel = new JPanel(new GridLayout(4, 1, 2, 2));
 
 		leftDashPanel.setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
 
@@ -256,7 +260,30 @@ public class CaesiumSwingGui {
 		this.contextTimeLabel = connectionIndicator;
 		leftDashPanel.add(connectionIndicator);
 
-		JLabel selectedJobLabel = new JLabel("Initializing...");
+		JLabel schedulingLabel = new JLabel("Scheduler Off");
+		schedulingLabel.setOpaque(true);
+		schedulingLabel.setHorizontalAlignment(JLabel.CENTER);
+		schedulingLabel.setBackground(Color.red);
+		schedulingLabel.setForeground(Color.white);
+		schedulingLabel.setHorizontalAlignment(JLabel.LEFT);
+		schedulingLabel.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 0));
+		schedulingLabel.setFont(defaultFont);
+
+		this.schedulingLabel = schedulingLabel;
+
+		JLabel emptyLabe2 = new JLabel("");
+		emptyLabe2.setOpaque(true);
+		emptyLabe2.setHorizontalAlignment(JLabel.CENTER);
+		emptyLabe2.setBackground(Color.white);
+		emptyLabe2.setForeground(Color.white);
+		emptyLabe2.setHorizontalAlignment(JLabel.LEFT);
+		emptyLabe2.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 0));
+		emptyLabe2.setFont(defaultFont);
+
+		leftDashPanel.add(schedulingLabel);
+		leftDashPanel.add(emptyLabe2);
+
+		JLabel selectedJobLabel = new JLabel(" - - - ");
 		selectedJobLabel.setOpaque(true);
 		selectedJobLabel.setHorizontalAlignment(JLabel.CENTER);
 		selectedJobLabel.setBackground(Color.GRAY);
@@ -304,10 +331,44 @@ public class CaesiumSwingGui {
 			}
 		});
 
-		JPanel barContainer = new JPanel(new GridLayout(2, 1, 2, 2));
+		JPanel barContainer = new JPanel(new GridLayout(4, 1, 2, 2));
 		barContainer.setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
 
+		JButton toggleSchedulingButton = new JButton("Disable");
+		toggleSchedulingButton.setFocusable(false);
+		toggleSchedulingButton.setFont(defaultFont);
+		toggleSchedulingButton.setBorder(BorderFactory.createLineBorder(Color.black));
+		toggleSchedulingButton.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (actionListenerMap.get("toggleSchedule") != null) {
+					actionListenerMap.get("toggleSchedule").actionPerformed(e);
+				}
+
+			}
+		});
+
+		this.toggleSchedulerButton = toggleSchedulingButton;
+
+		JButton openWebUIButton = new JButton("Open Web UI");
+		openWebUIButton.setFocusable(false);
+		openWebUIButton.setFont(defaultFont);
+		openWebUIButton.setBorder(BorderFactory.createLineBorder(Color.black));
+		openWebUIButton.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (actionListenerMap.get("openWebUI") != null) {
+					actionListenerMap.get("openWebUI").actionPerformed(e);
+				}
+
+			}
+		});
+
 		barContainer.add(reloadConfigBtn);
+		barContainer.add(toggleSchedulingButton);
+		barContainer.add(openWebUIButton);
 		barContainer.add(triggerJobButton);
 
 		rightDashPanel.add(barContainer, BorderLayout.CENTER);
@@ -513,6 +574,33 @@ public class CaesiumSwingGui {
 	public String getSeletedJobName() {
 
 		return this.selectedJobLabel.getText().trim();
+	}
+
+	public void setStatusText(String statusTextString) {
+		SwingUtilities.invokeLater(() -> {
+			this.statusLabel.setText(statusTextString);
+			this.statusLabel.setBackground(new Color(39, 174, 96));
+			this.statusLabel.setForeground(Color.white);
+		});
+
+	}
+
+	public void setSchedulerLightStatus(boolean inStandbyMode) {
+		SwingUtilities.invokeLater(() -> {
+			if (inStandbyMode) {
+				this.schedulingLabel.setText("Scheduler Off");
+				this.toggleSchedulerButton.setText("Enable");
+				this.schedulingLabel.setBackground(Color.red);
+				this.schedulingLabel.setForeground(Color.white);
+			} else {
+				this.schedulingLabel.setText("Scheduler On");
+				this.toggleSchedulerButton.setText("Disable");
+				this.schedulingLabel.setBackground(new Color(39, 174, 96));
+				this.schedulingLabel.setForeground(Color.white);
+			}
+
+		});
+
 	}
 
 }

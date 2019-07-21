@@ -1,29 +1,31 @@
-package caesium.model;
+package caesium.job_model;
 
-import org.quartz.Job;
+import org.apache.log4j.Logger;
+import org.quartz.DisallowConcurrentExecution;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 
-public class CaesiumJob implements Job {
+/**
+ * <p>
+ * This type of scheduled Job launch normal executable file in Windows, but will
+ * only launch once the previous scheduled job is completed.
+ * </p>
+ * 
+ * @author JanuxHsu
+ * 
+ */
 
-	public CaesiumJob() {
+@DisallowConcurrentExecution
+public class SingletonCaesiumJob extends SimpleCaesiumJob {
+
+	static Logger logger = Logger.getLogger(SimpleCaesiumJob.class);
+
+	public SingletonCaesiumJob() {
 
 	}
 
 	@Override
 	public void execute(JobExecutionContext context) throws JobExecutionException {
-
-		String action = context.getJobDetail().getJobDataMap().get("action").toString();
-		System.out.println(action + "1!!!!!");
-
-		for (int i = 0; i <= Integer.parseInt(action); i++) {
-			System.out.println(Thread.currentThread().getName() + " " + i);
-			try {
-				Thread.sleep(1000);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
+		super.execute(context);
 	}
 }

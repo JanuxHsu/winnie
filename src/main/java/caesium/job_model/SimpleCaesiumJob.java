@@ -14,6 +14,8 @@ import org.quartz.JobDetail;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 
+import caesium.core.CaesiumStore;
+import caesium.model.CaesiumJobStatus;
 import caesium.utils.CaesiumTriggerHelper;
 import caesium.utils.WindowsProcessHelper;
 
@@ -49,6 +51,7 @@ public class SimpleCaesiumJob implements Job {
 		System.out.println("Next:" + context.getNextFireTime() + "["
 				+ CaesiumTriggerHelper.getTriggerInfo(context.getTrigger()) + "]");
 
+		Map<String, String> processMap = null;
 		try {
 
 			if (!exec_path.isEmpty()) {
@@ -60,12 +63,14 @@ public class SimpleCaesiumJob implements Job {
 				logger.info(jobName + " Triggered!");
 
 				if (doGetPid) {
-					Map<String, String> outString = WindowsProcessHelper.getProcessIdsFromTitle(jobName);
+					processMap = WindowsProcessHelper.getProcessIdsFromTitle(jobName);
 
-					for (String keString : outString.keySet()) {
-						System.out.println(keString + "|" + outString.get(keString));
-					}
 				}
+
+				CaesiumJobStatus caesiumJobStatus = new CaesiumJobStatus(jobDetail.getKey(), processMap);
+				caesiumJobStatus.setPrevExec(context.getPreviousFireTime());
+				caesiumJobStatus.setNextExec(context.getNextFireTime());
+				CaesiumStore.jobStatusMap.put(jobDetail.getKey().getName(), caesiumJobStatus);
 
 			}
 

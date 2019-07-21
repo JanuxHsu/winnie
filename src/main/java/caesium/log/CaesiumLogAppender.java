@@ -38,7 +38,8 @@ public class CaesiumLogAppender extends AppenderSkeleton {
 	protected void append(LoggingEvent event) {
 
 		// System.out.println(event.getLoggerName() + " | " + event.getMessage());
-		if (event.getLoggerName().contains("caesium")) {
+		String loggerNameString = event.getLoggerName();
+		if (loggerNameString.contains("caesium") || loggerNameString.contains("root")) {
 			String timestamp = sdf.format(new Date(event.getTimeStamp()));
 			String logText = String.format("[%s]%s : %s", event.getLevel(), timestamp, event.getMessage());
 			System.out.println(logText);
