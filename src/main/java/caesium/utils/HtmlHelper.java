@@ -25,7 +25,6 @@ public class HtmlHelper {
 
 			}
 			String rowStr = String.format(baseString, rowlist_tmp.toArray());
-
 			resultString += rowStr;
 		}
 
