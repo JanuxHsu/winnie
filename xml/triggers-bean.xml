@@ -45,7 +45,7 @@
 			<ref bean="RPT0002" />
 		</property>
 		<property name="cronExpression">
-			<value>*/45 * * * * ?</value>
+			<value>0 */2 * * * ?</value>
 		</property>
 		<property name="misfireInstruction">
 			<value>#{T(org.quartz.CronTrigger).MISFIRE_INSTRUCTION_FIRE_ONCE_NOW}</value>

@@ -10,6 +10,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import org.apache.log4j.Logger;
 import org.quartz.JobKey;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
@@ -25,13 +26,14 @@ import caesium.utils.HtmlHelper;
 
 @Path("/jobs")
 public class JobUIServices {
-
+	Logger logger = Logger.getLogger(JobUIServices.class);
 	Gson gson = new Gson();
 	Gson gsonPretty = new GsonBuilder().setPrettyPrinting().create();
 
 	@GET
 	@Produces(MediaType.TEXT_HTML)
 	public String doGetAllClients() {
+
 		String html = "";
 		Scheduler scheduler = CaesiumMain.getScheduler();
 		try {
@@ -90,8 +92,10 @@ public class JobUIServices {
 			tableString += HtmlHelper.listToInnerTable(tableArrayList);
 			// tableString += "</tbody>";
 			tableString += "</table>";
-		} catch (SchedulerException e) {
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
+
+			logger.error(e.getMessage());
 			e.printStackTrace();
 		}
 
