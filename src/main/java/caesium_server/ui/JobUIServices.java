@@ -60,8 +60,9 @@ public class JobUIServices {
 
 			for (JobKey jobKey : scheduler.getJobKeys(GroupMatcher.anyJobGroup())) {
 				ArrayList<String> rowList = new ArrayList<>();
-
-				rowList.add(jobKey.getName());
+				String triggerTagStr = String.format("<a href=\"..\\api\\jobs\\trigger\\%s\">%s</a>", jobKey.getName(),
+						jobKey.getName());
+				rowList.add(triggerTagStr);
 				rowList.add(jobKey.getGroup());
 
 				if (CaesiumStore.jobStatusMap.containsKey(jobKey.getName())) {

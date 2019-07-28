@@ -42,9 +42,9 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.table.DefaultTableModel;
 
-public class CaesiumSwingGui {
+import caesium.CaesiumMain;
 
-	static String version = "Beta 1.0.0";
+public class CaesiumSwingGui {
 
 	public enum IconMessageMode {
 		ALWAYS, PERIODIC
@@ -172,7 +172,7 @@ public class CaesiumSwingGui {
 		PopupMenu trayPopupMenu = new PopupMenu();
 
 		// add menu item for Pop-up menu
-		MenuItem version = new MenuItem("Version : " + CaesiumSwingGui.version);
+		MenuItem version = new MenuItem("Version : " + CaesiumMain.version);
 		version.setEnabled(false);
 		trayPopupMenu.add(version);
 		trayPopupMenu.addSeparator();

@@ -44,7 +44,7 @@ import caesium_gui.CaesiumSwingGui;
 import caesium_gui.CaesiumTableModel;
 
 public class CaesiumMain {
-
+	public static String version = "Caesium Scheduler v1.2 Beta (By JanuxHsu)";
 	static Logger logger = Logger.getRootLogger();
 	static StdScheduler scheduler;
 	static FileSystemXmlApplicationContext context;
@@ -81,7 +81,7 @@ public class CaesiumMain {
 		loadApplicationContext();
 		// context = new FileSystemXmlApplicationContext("Caesium-beans-config.xml");
 
-		caesiumSwingGui.setTilte("Caesium Scheduler v1.1 Beta (By JanuxHsu)");
+		caesiumSwingGui.setTilte(version);
 		caesiumSwingGui.show();
 
 		CaesiumLogAppender caesiumLogAppender = new CaesiumLogAppender();
