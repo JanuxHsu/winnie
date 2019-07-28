@@ -36,18 +36,17 @@ public class JobUIServices {
 
 		String html = "";
 		Scheduler scheduler = CaesiumMain.getScheduler();
+		html += String.format("<p>%s</p>", CaesiumMain.version);
 		try {
 			if (scheduler.isInStandbyMode()) {
-				html += "<p style=\"width:20%; background:red;\">Scheduler: Off</p>";
+				html += "<p style=\"width:10%; padding: 15px; color:#FFF; background:red;\">Scheduler: Off</p>";
 			} else {
-				html += "<p style=\"width:20%; background:green;\">Scheduler: On</p>";
+				html += "<p style=\"width:10%; padding: 15px; color:#FFF; background:green;\">Scheduler: On</p>";
 			}
 		} catch (SchedulerException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-
-		html += "<a href=\"scheduler/toggle\" style=\"width:20%;\">Toggle Scheduler</a>";
 
 		String tableString = "<Table border=\"2\">";
 		try {

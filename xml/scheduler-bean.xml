@@ -13,7 +13,7 @@
 			<list>
 				<!-- <ref bean="simpleTriggerBean" /> -->
 				<ref bean="cronTriggerBean" />
-				<ref bean="cronTriggerBean2" />
+				<!-- <ref bean="cronTriggerBean2" /> -->
 			</list>
 		</property>
 

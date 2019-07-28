@@ -43,7 +43,7 @@ public class JobServices {
 
 			for (JobKey jobKey : scheduler.getJobKeys(GroupMatcher.anyJobGroup())) {
 				JsonObject jobJsonElement = (JsonObject) gson.toJsonTree(jobKey, JobKey.class);
-
+				jobJsonElement.addProperty("triggers", scheduler.getTriggersOfJob(jobKey).size());
 				CaesiumJobStatus caesiumJobStatus = CaesiumStore.jobStatusMap.get(jobKey.getName());
 				if (caesiumJobStatus != null) {
 					jobJsonElement.addProperty("pre-startTime", caesiumJobStatus.getPrevRunTime());
