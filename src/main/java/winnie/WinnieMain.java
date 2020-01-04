@@ -9,6 +9,9 @@ import java.util.Vector;
 
 import javax.swing.JTable;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+
 import winnie_gui.WinnieSwingGui;
 import winnie_gui.WinnieTableModel;
 
@@ -18,6 +21,8 @@ public class WinnieMain {
 	static WinnieSwingGui caesiumSwingGui;
 
 	public static void main(String[] args) throws IOException {
+
+		JsonObject dataObj = new JsonObject();
 
 		caesiumSwingGui = new WinnieSwingGui();
 
@@ -93,8 +98,6 @@ public class WinnieMain {
 
 			}
 		});
-
-		
 
 		String statusTextString = String.format("[Local Mode]");
 
