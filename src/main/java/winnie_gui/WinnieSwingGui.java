@@ -1,4 +1,4 @@
-package caesium_gui;
+package winnie_gui;
 
 import java.awt.AWTException;
 import java.awt.BorderLayout;
@@ -42,9 +42,9 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.table.DefaultTableModel;
 
-import caesium.CaesiumMain;
+import winnie.WinnieMain;
 
-public class CaesiumSwingGui {
+public class WinnieSwingGui {
 
 	public enum IconMessageMode {
 		ALWAYS, PERIODIC
@@ -73,7 +73,7 @@ public class CaesiumSwingGui {
 	private Long iconShowMessageTimestamp = Calendar.getInstance().getTimeInMillis();
 	JLabel schedulingLabel;
 
-	public CaesiumSwingGui() {
+	public WinnieSwingGui() {
 
 		JFrame window = new JFrame();
 
@@ -172,7 +172,7 @@ public class CaesiumSwingGui {
 		PopupMenu trayPopupMenu = new PopupMenu();
 
 		// add menu item for Pop-up menu
-		MenuItem version = new MenuItem("Version : " + CaesiumMain.version);
+		MenuItem version = new MenuItem("Version : " + WinnieMain.version);
 		version.setEnabled(false);
 		trayPopupMenu.add(version);
 		trayPopupMenu.addSeparator();
@@ -394,7 +394,7 @@ public class CaesiumSwingGui {
 		centerPanel.setBackground(new Color(44, 62, 80));
 		centerPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
-		CaesiumTableModel tableModel = new CaesiumTableModel();
+		WinnieTableModel tableModel = new WinnieTableModel();
 		tableModel.addColumn("Item");
 		tableModel.addColumn("Value");
 
