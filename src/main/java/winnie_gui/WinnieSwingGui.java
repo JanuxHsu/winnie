@@ -25,6 +25,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.Vector;
 import java.util.stream.Collectors;
 
@@ -246,56 +247,6 @@ public class WinnieSwingGui {
 
 		leftDashPanel.setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
 
-		JLabel connectionIndicator = new JLabel("Initializing...");
-		connectionIndicator.setOpaque(true);
-		connectionIndicator.setHorizontalAlignment(JLabel.CENTER);
-		connectionIndicator.setBackground(Color.GRAY);
-		connectionIndicator.setForeground(Color.white);
-		// connectionIndicator.setFont(defaultFont);
-		connectionIndicator.setHorizontalAlignment(JLabel.LEFT);
-		connectionIndicator.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 0));
-
-		connectionIndicator.setFont(defaultFont);
-
-		this.contextTimeLabel = connectionIndicator;
-		leftDashPanel.add(connectionIndicator);
-
-		JLabel schedulingLabel = new JLabel("Scheduler Off");
-		schedulingLabel.setOpaque(true);
-		schedulingLabel.setHorizontalAlignment(JLabel.CENTER);
-		schedulingLabel.setBackground(Color.red);
-		schedulingLabel.setForeground(Color.white);
-		schedulingLabel.setHorizontalAlignment(JLabel.LEFT);
-		schedulingLabel.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 0));
-		schedulingLabel.setFont(defaultFont);
-
-		this.schedulingLabel = schedulingLabel;
-
-		JLabel emptyLabe2 = new JLabel("");
-		emptyLabe2.setOpaque(true);
-		emptyLabe2.setHorizontalAlignment(JLabel.CENTER);
-		emptyLabe2.setBackground(Color.white);
-		emptyLabe2.setForeground(Color.white);
-		emptyLabe2.setHorizontalAlignment(JLabel.LEFT);
-		emptyLabe2.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 0));
-		emptyLabe2.setFont(defaultFont);
-
-		leftDashPanel.add(schedulingLabel);
-		leftDashPanel.add(emptyLabe2);
-
-		JLabel selectedJobLabel = new JLabel(" - - - ");
-		selectedJobLabel.setOpaque(true);
-		selectedJobLabel.setHorizontalAlignment(JLabel.CENTER);
-		selectedJobLabel.setBackground(Color.GRAY);
-		selectedJobLabel.setForeground(Color.white);
-		// workerIndicator.setFont(defaultFont);
-		selectedJobLabel.setHorizontalAlignment(JLabel.LEFT);
-		selectedJobLabel.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 0));
-		selectedJobLabel.setFont(defaultFont);
-
-		this.selectedJobLabel = selectedJobLabel;
-		leftDashPanel.add(selectedJobLabel);
-
 		dashboardPanel.add(leftDashPanel);
 
 		JPanel rightDashPanel = new JPanel(new BorderLayout());
@@ -316,60 +267,10 @@ public class WinnieSwingGui {
 			}
 		});
 
-		JButton triggerJobButton = new JButton("Trigger");
-		triggerJobButton.setFocusable(false);
-		triggerJobButton.setFont(defaultFont);
-		triggerJobButton.setBorder(BorderFactory.createLineBorder(Color.black));
-		triggerJobButton.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if (actionListenerMap.get("triggerJobButton") != null) {
-					actionListenerMap.get("triggerJobButton").actionPerformed(e);
-				}
-
-			}
-		});
-
-		JPanel barContainer = new JPanel(new GridLayout(4, 1, 2, 2));
+		JPanel barContainer = new JPanel(new GridLayout(2, 1, 2, 2));
 		barContainer.setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
 
-		JButton toggleSchedulingButton = new JButton("Disable");
-		toggleSchedulingButton.setFocusable(false);
-		toggleSchedulingButton.setFont(defaultFont);
-		toggleSchedulingButton.setBorder(BorderFactory.createLineBorder(Color.black));
-		toggleSchedulingButton.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if (actionListenerMap.get("toggleSchedule") != null) {
-					actionListenerMap.get("toggleSchedule").actionPerformed(e);
-				}
-
-			}
-		});
-
-		this.toggleSchedulerButton = toggleSchedulingButton;
-
-		JButton openWebUIButton = new JButton("Open Web UI");
-		openWebUIButton.setFocusable(false);
-		openWebUIButton.setFont(defaultFont);
-		openWebUIButton.setBorder(BorderFactory.createLineBorder(Color.black));
-		openWebUIButton.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if (actionListenerMap.get("openWebUI") != null) {
-					actionListenerMap.get("openWebUI").actionPerformed(e);
-				}
-
-			}
-		});
-
 		barContainer.add(reloadConfigBtn);
-		barContainer.add(toggleSchedulingButton);
-		barContainer.add(openWebUIButton);
-		barContainer.add(triggerJobButton);
 
 		rightDashPanel.add(barContainer, BorderLayout.CENTER);
 		dashboardPanel.add(rightDashPanel);
@@ -535,19 +436,34 @@ public class WinnieSwingGui {
 		this.mouseListenerMap.put(componentId, listener);
 	}
 
-	public void refreshTable(List<List<String>> rowList) {
+	public void updateTableSchema(Set<String> schema) {
+		DefaultTableModel model = (DefaultTableModel) this.systemInfoTable.getModel();
+		model.setColumnCount(0);
+
+		for (String colName : schema) {
+			model.addColumn(colName);
+		}
+
+	}
+
+	public void refreshTable(List<Map<String, String>> rowList) {
 
 		try {
 
 			DefaultTableModel model = (DefaultTableModel) this.systemInfoTable.getModel();
 
 			SwingUtilities.invokeLater(() -> {
+
+				if (rowList.size() > 0) {
+					updateTableSchema(rowList.get(0).keySet());
+				}
+
 				@SuppressWarnings("unchecked")
 				Vector<Vector<String>> dataVector = model.getDataVector();
 				dataVector.clear();
 
 				rowList.stream().forEach(row -> {
-					Vector<String> vect = row.stream().map(columnVal -> {
+					Vector<String> vect = row.values().stream().map(columnVal -> {
 
 						return columnVal.trim();
 					}).collect(Collectors.toCollection(Vector::new));
